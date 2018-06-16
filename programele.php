@@ -58,30 +58,37 @@
 	{
 		$conn = dbconnection();
 		if(is_null($conn)) exit;
+		echo "\n---\n You choose add client. Write client's data (required):\n";
 		
-		echo "Client's firstname: ";
-		$input = fopen ("php://stdin","r");
-		$firstname = trim(fgets($input));
-		
-		echo "Client's lastname: ";
-		$input = fopen ("php://stdin","r");
-		$lastname = trim(fgets($input));
-		
-		echo "Client's email: ";
-		$input = fopen ("php://stdin","r");
-		$email = trim(fgets($input));
-		$sql = "SELECT * FROM client WHERE email = '$email'";
-		$result = $conn->query($sql);
-		$rowcount=mysqli_num_rows($result); 
-		while (!filter_var($email, FILTER_VALIDATE_EMAIL) OR $rowcount>0) 
+		do
 		{
-			echo "Email address '$email' is not valid or is used.\n Client's email: ";
+			echo "Client's firstname: ";
+			$input = fopen ("php://stdin","r");
+			$firstname = trim(fgets($input));
+		}while(strlen($firstname)<1);
+		
+		do
+		{
+			echo "Client's lastname: ";
+			$input = fopen ("php://stdin","r");
+			$lastname = trim(fgets($input));
+		}while(strlen($lastname)<1);
+				
+			echo "Client's email: ";
 			$input = fopen ("php://stdin","r");
 			$email = trim(fgets($input));
 			$sql = "SELECT * FROM client WHERE email = '$email'";
 			$result = $conn->query($sql);
 			$rowcount=mysqli_num_rows($result); 
-		}		
+			while (!filter_var($email, FILTER_VALIDATE_EMAIL) OR $rowcount>0) 
+			{
+				echo "Email address '$email' is not valid or is used.\n Client's email: ";
+				$input = fopen ("php://stdin","r");
+				$email = trim(fgets($input));
+				$sql = "SELECT * FROM client WHERE email = '$email'";
+				$result = $conn->query($sql);
+				$rowcount=mysqli_num_rows($result); 
+			}		
 		
 		echo "Client's phonenumber1: ";
 		$input = fopen ("php://stdin","r");
@@ -158,14 +165,18 @@
 				}				
 				$updateData = " ";
 				
-				echo "Client's new firstname (or '-' if do not change): ";
+				do{
+					echo "Client's new firstname (or '-' if do not change): ";
 						$input = fopen ("php://stdin","r");
 						$firstname = trim(fgets($input));
+				}while(strlen($firstname)<1);		
 					if($firstname != '-'){$updateData=$updateData."firstname = '$firstname', ";}
-					
-				echo "Client's new lastname (or '-' if do not change): ";
+				
+				do{	
+					echo "Client's new lastname (or '-' if do not change): ";
 						$input = fopen ("php://stdin","r");
 						$lastname = trim(fgets($input));
+				}while(strlen($firstname)<1);		
 					if($lastname != '-'){$updateData=$updateData."lastname = '$lastname', ";}
 					
 				echo "Client's new email (or '-' if do not change): ";
